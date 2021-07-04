@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  ldap-server:
+    build: 
+      context: ./ldap
+    ports:
+      - "389:389"
+    restart: always
+    #command: /usr/local/bin/entrypoint.sh
+  ldap-admin:
+    image: osixia/phpldapadmin:latest
+    restart: always
+    container_name: ldap-admin
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: "ldap-server"
+      PHPLDAPADMIN_HTTPS: "false"
+    ports:
+      - "8080:80"
+    depends_on:
+      - "ldap-server"
+
